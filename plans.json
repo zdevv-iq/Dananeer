@@ -1,0 +1,18 @@
+{
+  "monthly": {
+    "duration": "monthly",
+    "amount": 5000
+  },
+  "three_month": {
+    "duration": "three_month",
+    "amount": 12000
+  },
+  "six_month": {
+    "duration": "six_month",
+    "amount": 22000
+  },
+  "yearly": {
+    "duration": "yearly",
+    "amount": 40000
+  }
+}

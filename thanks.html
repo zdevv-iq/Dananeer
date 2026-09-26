@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>شكرًا لك</title>
+<link rel="icon" href="icon.png">
+<meta name="theme-color" content="#09090B">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<main>
+  <nav>
+    <span class="brand"><img src="icon.png" alt=""> <span id="brand">جزدان</span></span>
+    <button type="button" id="lang" class="ghost">English</button>
+  </nav>
+
+  <h1 id="head">وصلت دفعتك</h1>
+  <p class="lede" id="lede">يجري الآن تفعيل Pro على حسابك. عادة يستغرق أقل من دقيقة.</p>
+
+  <section class="card">
+    <p id="status">جارٍ التحقق…</p>
+    <ol id="steps">
+      <li>افتح تطبيق جزدان على هاتفك.</li>
+      <li>من الإعدادات، سجّل الدخول بنفس حساب Google.</li>
+      <li>ستجد ميزات Pro مفعَّلة.</li>
+    </ol>
+    <p class="fine" id="fine">إذا لم يُفعَّل خلال بضع دقائق، راسلنا على dananeer.app@gmail.com وأرفق وصل الدفع.</p>
+  </section>
+
+  <footer>
+    <a href="index.html" id="backLink">الرئيسية</a>
+    <a href="privacy.html" id="privacyLink">سياسة الخصوصية</a>
+    <a href="mailto:dananeer.app@gmail.com">dananeer.app@gmail.com</a>
+  </footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script>
+/**
+ * Where Wayl sends the customer after paying. Pro is granted by the server
+ * when Wayl confirms the payment, so this page only waits for that to land and
+ * says what to do next. It never grants anything itself.
+ */
+(function () {
+  var TEXT = {
+    ar: {
+      lang: 'English', brand: 'جزدان', title: 'شكرًا لك', head: 'وصلت دفعتك', lede: 'يجري الآن تفعيل Pro على حسابك. عادة يستغرق أقل من دقيقة.',
+      checking: 'جارٍ التحقق…',
+      done: 'تم التفعيل. Pro مفعَّل حتى {date}.',
+      waiting: 'لم يصلنا تأكيد الدفع بعد. اترك الصفحة مفتوحة لحظة.',
+      signIn: 'سجّل الدخول بحساب Google لعرض حالة اشتراكك.',
+      steps: ['افتح تطبيق جزدان على هاتفك.', 'من الإعدادات، سجّل الدخول بنفس حساب Google.', 'ستجد ميزات Pro مفعَّلة.'],
+      fine: 'إذا لم يُفعَّل خلال بضع دقائق، راسلنا على dananeer.app@gmail.com وأرفق وصل الدفع.',
+      back: 'الرئيسية', privacy: 'سياسة الخصوصية',
+    },
+    en: {
+      lang: 'العربية', brand: 'Jezdan', title: 'Thank you', head: 'Payment received', lede: 'Pro is being switched on for your account. This usually takes under a minute.',
+      checking: 'Checking…',
+      done: 'Done. Pro is active until {date}.',
+      waiting: 'The payment confirmation has not arrived yet. Keep this page open a moment.',
+      signIn: 'Sign in with Google to see your subscription.',
+      steps: ['Open Jezdan on your phone.', 'In Settings, sign in with the same Google account.', 'The Pro features are on.'],
+      fine: 'If it is not on after a few minutes, email dananeer.app@gmail.com with your payment receipt.',
+      back: 'Home', privacy: 'Privacy policy',
+    },
+  };
+  var lang = localStorage.getItem('dananeer.lang') || 'ar';
+  var client = window.supabase.createClient(window.DANANEER_CONFIG.supabaseUrl, window.DANANEER_CONFIG.supabaseAnonKey);
+  var reference = new URLSearchParams(location.search).get('referenceId');
+  var tries = 0;
+
+  function t(key) { return (TEXT[lang] || TEXT.en)[key]; }
+  function paint() {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.title = t('title');
+    document.getElementById('brand').textContent = t('brand');
+    document.getElementById('lang').textContent = t('lang');
+    document.getElementById('head').textContent = t('head');
+    document.getElementById('lede').textContent = t('lede');
+    document.getElementById('fine').textContent = t('fine');
+    document.getElementById('backLink').textContent = t('back');
+    document.getElementById('privacyLink').textContent = t('privacy');
+    var steps = document.getElementById('steps');
+    steps.textContent = '';
+    t('steps').forEach(function (s) { var li = document.createElement('li'); li.textContent = s; steps.appendChild(li); });
+  }
+  function say(text) { document.getElementById('status').textContent = text; }
+
+  async function check() {
+    var session = (await client.auth.getSession()).data.session;
+    if (!session) return say(t('signIn'));
+    var query = client.from('pro_orders').select('status, granted_until').eq('status', 'paid');
+    if (reference) query = client.from('pro_orders').select('status, granted_until').eq('reference_id', reference);
+    var res = await query.order('granted_until', { ascending: false }).limit(1);
+    var row = res.data && res.data[0];
+    if (row && row.status === 'paid' && row.granted_until) {
+      var when = new Date(row.granted_until);
+      return say(t('done').replace('{date}', when.toLocaleDateString(lang === 'ar' ? 'ar-IQ' : 'en-GB', { year: 'numeric', month: 'long', day: 'numeric' })));
+    }
+    say(t('waiting'));
+    if (tries++ < 20) setTimeout(check, 3000);   // Wayl's webhook is usually seconds away
+  }
+
+  document.getElementById('lang').addEventListener('click', function () {
+    lang = lang === 'ar' ? 'en' : 'ar';
+    localStorage.setItem('dananeer.lang', lang);
+    paint();
+    say(t('checking'));
+    check();
+  });
+
+  paint();
+  say(t('checking'));
+  check();
+})();
+</script>
+</body>
+</html>

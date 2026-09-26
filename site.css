@@ -1,65 +1,244 @@
-/* One stylesheet for every page on dananeerapp.com. Light and dark, RTL and LTR. */
+/* One stylesheet for every page on jezdan.app. Light and dark, RTL and LTR.
+
+   The colours are the app's own (src/theme.js): someone who pays here and then
+   opens the app should not feel they have changed product. Gold is the brand
+   in both themes; the text that sits on it stays dark in both, because white
+   on gold is barely legible.
+
+   Everything that has a side uses logical properties - margin-inline-start
+   rather than margin-left - so the Arabic and English layouts are the same
+   stylesheet read in opposite directions, not two sets of rules. */
 
 :root {
   color-scheme: light dark;
-  --bg: #fbfaf7; --text: #1d2521; --muted: #5d6862; --line: #e3e0d8;
-  --accent: #1f7a55; --accent-text: #ffffff; --card: #ffffff;
+  --bg: #FBFAF7; --text: #1A1A1E; --muted: #5C5C66; --line: #E5E1D8;
+  --accent: #B07C12; --accent-text: #1A1206; --card: #FFFFFF;
+  --raise: #F3F1EC;
+  --glow: rgba(176, 124, 18, 0.10);
+  --shadow: 0 1px 2px rgba(26, 18, 6, 0.04), 0 8px 24px rgba(26, 18, 6, 0.06);
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #121614; --text: #e8ece9; --muted: #9aa59f; --line: #2a302d;
-    --accent: #5cc496; --accent-text: #0c1512; --card: #181d1a;
+    --bg: #09090B; --text: #F5F5F7; --muted: #A1A1AA; --line: #27272D;
+    --accent: #F2BE3C; --accent-text: #1A1206; --card: #141417;
+    --raise: #1E1E23;
+    --glow: rgba(242, 190, 60, 0.13);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.35);
   }
 }
 
 * { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
 body {
-  margin: 0; background: var(--bg); color: var(--text);
-  font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Tahoma, "Noto Naskh Arabic", sans-serif;
+  margin: 0;
+  /* A pool of brand colour behind the top of the page, so it does not open on
+     a flat rectangle. It is a background rather than a positioned element on
+     purpose: a 600px circle placed near the edge sticks out of a 375px phone
+     and widens the document, which in Arabic shunts the whole page sideways.
+     A background cannot overflow anything. */
+  background:
+    radial-gradient(60% 420px at 50% -60px, var(--glow), transparent 70%)
+    no-repeat,
+    var(--bg);
+  color: var(--text);
+  font-family: "IBM Plex Sans Arabic", "IBM Plex Sans", system-ui, -apple-system,
+    "Segoe UI", Tahoma, "Noto Naskh Arabic", sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
 }
+
+/* The policy pages are for reading, so they keep the narrow measure; the
+   landing page opens out to hold the screenshots beside the words. */
 main { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
+main.wide { max-width: 1060px; }
 
-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 32px; }
-.brand { font-size: 20px; letter-spacing: 0.02em; }
+/* height: auto matters: the <img> tags carry width and height attributes so
+   the browser reserves the right space before the file arrives, and without
+   this the CSS width would fight the attribute and stretch them. */
+img { max-width: 100%; height: auto; display: block; }
 
-h1 { font-size: clamp(26px, 6vw, 34px); line-height: 1.2; margin: 0 0 12px; }
-h2 { font-size: 20px; margin: 32px 0 8px; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+
+h1 { font-size: clamp(30px, 7vw, 46px); line-height: 1.15; margin: 0 0 14px; letter-spacing: -0.02em; }
+h2 { font-size: clamp(22px, 4vw, 28px); line-height: 1.25; margin: 0 0 10px; letter-spacing: -0.01em; }
 h3 { font-size: 17px; margin: 24px 0 8px; }
-.lede { font-size: 17px; color: var(--muted); margin: 0 0 28px; }
 p { margin: 0 0 14px; }
-a { color: var(--accent); }
+.lede { font-size: clamp(17px, 2.4vw, 19px); color: var(--muted); margin: 0 0 28px; }
 
-.features { list-style: none; padding: 0; margin: 0 0 32px; }
-.features li { padding: 7px 0; }
+/* ------------------------------------------------------------------ chrome */
+
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; margin-bottom: 8px; padding: 8px 0;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; }
+.brand img { width: 34px; height: 34px; border-radius: 10px; }
+
+footer, .site-footer {
+  display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;
+  color: var(--muted); font-size: 14px;
+  margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line);
+}
+.site-footer { margin: 0 0 24px; padding-top: 0; border-top: 0; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+
+/* ------------------------------------------------------------------ buttons */
+
+button, .btn {
+  font: inherit; font-weight: 700; cursor: pointer;
+  border-radius: 12px; border: 1px solid transparent;
+  padding: 13px 22px; text-decoration: none; display: inline-block; text-align: center;
+  transition: transform 0.08s ease, opacity 0.15s ease;
+}
+button:active, .btn:active { transform: translateY(1px); }
+button:disabled { opacity: 0.55; cursor: default; transform: none; }
+
+.primary, .btn-primary {
+  background: var(--accent); color: var(--accent-text); border-color: var(--accent);
+}
+.primary { width: 100%; }
+.btn-ghost, .ghost {
+  background: transparent; color: var(--text);
+  border-color: var(--line); padding: 12px 20px;
+}
+.ghost { font-weight: 600; padding: 8px 14px; color: var(--accent); }
+.linklike {
+  background: none; border: 0; color: var(--accent); padding: 0;
+  font-size: 14px; font-weight: 600; text-decoration: underline;
+}
+
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 18px; }
+.cta-note { font-size: 13px; color: var(--muted); margin: 0; }
+
+/* --------------------------------------------------------------------- hero */
+
+.hero {
+  display: grid; grid-template-columns: 1fr; gap: 32px;
+  align-items: center; padding: 24px 0 8px;
+}
+@media (min-width: 860px) {
+  .hero { grid-template-columns: 1.05fr 0.95fr; gap: 48px; padding: 40px 0 24px; }
+}
+
+.eyebrow {
+  display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--accent);
+  background: var(--glow); border-radius: 999px; padding: 5px 13px; margin-bottom: 16px;
+}
+
+/* -------------------------------------------------------------------- phone */
+
+.phone {
+  width: 100%; max-width: 270px; margin-inline: auto;
+  border: 1px solid var(--line); border-radius: 30px; padding: 7px;
+  background: var(--card); box-shadow: var(--shadow);
+}
+.phone img { border-radius: 24px; width: 100%; }
+.phone-lg { max-width: 300px; }
+
+/* ------------------------------------------------------------------- strips */
+
+.strip {
+  display: grid; gap: 12px; margin: 44px 0;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+.strip div {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 14px; padding: 16px 18px;
+}
+.strip b { display: block; font-size: 15px; margin-bottom: 2px; }
+.strip span { color: var(--muted); font-size: 14px; }
+
+/* ----------------------------------------------------------------- features */
+
+.section-head { margin: 72px 0 8px; }
+.section-head p { color: var(--muted); margin: 0; }
+
+.feature {
+  display: grid; grid-template-columns: 1fr; gap: 28px;
+  align-items: center; margin: 44px 0;
+}
+@media (min-width: 860px) {
+  .feature { grid-template-columns: 1fr 1fr; gap: 56px; margin: 72px 0; }
+  /* The phone leads, on the opposite side to the hero's. Marking the ones
+     that swap with a class rather than :nth-of-type keeps it from depending
+     on how many other sections happen to sit above them. */
+  .feature .feature-art { order: -1; }
+  .feature.flip .feature-art { order: 0; }
+}
+.feature h2 { margin-bottom: 8px; }
+.feature p { color: var(--muted); margin: 0 0 12px; }
+.feature ul { margin: 0; padding-inline-start: 20px; color: var(--muted); }
+.feature li { margin-bottom: 4px; }
+
+/* --------------------------------------------------------------------- grid */
+
+.grid {
+  display: grid; gap: 12px; margin: 28px 0 0;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+.tile {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 14px; padding: 18px;
+}
+.tile b { display: block; margin-bottom: 4px; }
+.tile span { color: var(--muted); font-size: 14px; }
+
+/* ---------------------------------------------------------------------- pro */
 
 .card {
-  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-  padding: 20px; margin-bottom: 24px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+  padding: 24px; margin-bottom: 24px;
 }
+#pro { scroll-margin-top: 24px; }
 .who { color: var(--muted); font-size: 14px; }
 .status {
-  background: var(--bg); border: 1px solid var(--line); border-radius: 10px;
-  padding: 10px 12px; font-size: 15px;
+  background: var(--raise); border: 1px solid var(--line); border-radius: 12px;
+  padding: 11px 14px; font-size: 15px; margin-bottom: 16px;
 }
-.fine { color: var(--muted); font-size: 13px; margin: 16px 0 0; }
+.fine { color: var(--muted); font-size: 13px; margin: 18px 0 0; }
 
 .plans { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
-.plan { border: 1px solid var(--line); border-radius: 12px; padding: 16px; text-align: center; }
-.plan-name { font-weight: 700; font-size: 18px; }
-.plan-per { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
-
-button { font: inherit; cursor: pointer; border-radius: 10px; }
-button:disabled { opacity: 0.6; cursor: default; }
-.primary {
-  width: 100%; padding: 12px 16px; border: 0;
-  background: var(--accent); color: var(--accent-text); font-weight: 700;
+.plan {
+  border: 1px solid var(--line); border-radius: 14px; padding: 18px;
+  text-align: center; background: var(--bg);
 }
-.ghost { padding: 8px 14px; background: transparent; color: var(--accent); border: 1px solid var(--line); }
-.linklike { background: none; border: 0; color: var(--accent); padding: 0; font-size: 14px; }
+.plan-name { font-weight: 700; font-size: 18px; }
+.plan-per { color: var(--muted); font-size: 14px; margin-bottom: 14px; }
+
+/* The free week, above the prices: it is the easiest thing to say yes to. */
+.trial {
+  border: 1px solid var(--accent); background: var(--glow);
+  border-radius: 16px; padding: 22px; margin-bottom: 20px; text-align: center;
+}
+.trial-head { font-size: 19px; font-weight: 700; margin: 0 0 6px; }
+.trial-sub { font-size: 14px; color: var(--muted); margin: 0 0 16px; }
+
+/* --------------------------------------------------------------------- faq */
+
+.faq { margin-top: 24px; border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary {
+  cursor: pointer; padding: 16px 4px; font-weight: 700; list-style: none;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+"; color: var(--accent); font-size: 22px; font-weight: 400; line-height: 1;
+}
+.faq details[open] summary::after { content: "\2212"; }
+.faq p { color: var(--muted); padding: 0 4px 16px; margin: 0; }
+
+/* ------------------------------------------------------------------ policy */
 
 article + article { border-top: 1px solid var(--line); margin-top: 48px; padding-top: 16px; }
 .meta { margin: 0; }
-footer, .site-footer {
-  display: flex; flex-wrap: wrap; gap: 16px;
-  color: var(--muted); font-size: 14px; margin-top: 48px;
+.features { list-style: none; padding: 0; margin: 0 0 32px; }
+.features li { padding: 7px 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
 }
