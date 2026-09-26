@@ -195,6 +195,36 @@ button:disabled { opacity: 0.55; cursor: default; transform: none; }
 }
 #pro { scroll-margin-top: 24px; }
 .who { color: var(--muted); font-size: 14px; }
+
+/* ------------------------------------------------------- email sign-in */
+
+.or {
+  display: flex; align-items: center; gap: 14px;
+  margin: 22px 0; color: var(--muted); font-size: 13px;
+}
+.or::before, .or::after {
+  content: ""; flex: 1; height: 1px; background: var(--line);
+}
+
+.fields { display: grid; gap: 14px; }
+.field { display: grid; gap: 6px; }
+.field span { font-size: 13px; font-weight: 600; color: var(--muted); }
+
+input[type="email"], input[type="password"], input[type="text"] {
+  font: inherit; width: 100%; padding: 12px 14px;
+  color: var(--text); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 12px;
+}
+input:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent);
+}
+/* The code is short and read back digit by digit, so it gets room to breathe. */
+#code-in { letter-spacing: 0.35em; font-size: 18px; text-align: center; }
+
+.switcher {
+  display: flex; flex-wrap: wrap; gap: 8px 20px;
+  margin: 16px 0 0; justify-content: space-between;
+}
 .status {
   background: var(--raise); border: 1px solid var(--line); border-radius: 12px;
   padding: 11px 14px; font-size: 15px; margin-bottom: 16px;

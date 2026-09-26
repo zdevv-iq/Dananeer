@@ -92,7 +92,30 @@ var TEXT = {
     q5: 'بياناتي وين تروح؟',
     a5: 'تبقى بجهازك. ما يُرفع شي إلا إذا شغّلت النسخ الاحتياطي بنفسك، وتكدر تحذف كل شي من الإعدادات بأي وكت.',
 
-    signInWhy: 'سجّل الدخول بحساب Google الذي تستخدمه في التطبيق، حتى يُفعَّل Pro على نفس الحساب.',
+    signInWhy: 'سجّل الدخول بنفس الحساب الذي تستخدمه في التطبيق، حتى يُفعَّل Pro على نفس الحساب.',
+
+    or: 'أو',
+    emailLabel: 'البريد الإلكتروني',
+    passLabel: 'كلمة السر',
+    codeLabel: 'الرمز المُرسل إلى بريدك',
+    emailSignIn: 'تسجيل الدخول',
+    emailSignUp: 'سوِّ حساب',
+    sendCode: 'أرسل لي رمز',
+    setPassword: 'غيّر كلمة السر',
+    needAccount: 'ما عندك حساب؟ سوِّ واحد',
+    haveAccount: 'عندك حساب؟ سجّل الدخول',
+    forgot: 'نسيت كلمة السر؟',
+    working: 'لحظة…',
+    codeSent: 'أرسلنا رمزًا إلى بريدك. اكتبه هنا مع كلمة السر الجديدة.',
+    passwordSet: 'تم تغيير كلمة السر ودخلت على حسابك.',
+    errEmail: 'اكتب بريدًا إلكترونيًا صحيحًا.',
+    errShort: 'كلمة السر لازم ٦ أحرف على الأقل.',
+    errTaken: 'هذا البريد عنده حساب أصلًا. سجّل الدخول بدل ما تسوي حساب جديد.',
+    errWrong: 'البريد أو كلمة السر غير صحيحة.',
+    errWeak: 'كلمة السر ضعيفة. اختر وحدة أطول.',
+    errCode: 'الرمز غير صحيح أو انتهت صلاحيته. اطلب رمزًا جديدًا.',
+    errTooMany: 'محاولات كثيرة. انتظر شوية وعاود.',
+    errServer: 'صار خلل. حاول مرة ثانية بعد شوية.',
     signIn: 'تسجيل الدخول بحساب Google',
     signedInAs: 'مسجّل الدخول باسم',
     signOut: 'تسجيل الخروج',
@@ -189,7 +212,30 @@ var TEXT = {
     q5: 'Where does my data go?',
     a5: 'It stays on your device. Nothing is uploaded unless you switch backup on yourself, and you can delete all of it from Settings at any time.',
 
-    signInWhy: 'Sign in with the Google account you use in the app, so Pro lands on that account.',
+    signInWhy: 'Sign in with the same account you use in the app, so Pro lands on that account.',
+
+    or: 'or',
+    emailLabel: 'Email address',
+    passLabel: 'Password',
+    codeLabel: 'The code sent to your email',
+    emailSignIn: 'Sign in',
+    emailSignUp: 'Create account',
+    sendCode: 'Email me a code',
+    setPassword: 'Set new password',
+    needAccount: 'No account yet? Create one',
+    haveAccount: 'Already have an account? Sign in',
+    forgot: 'Forgotten your password?',
+    working: 'One moment…',
+    codeSent: 'We have emailed you a code. Enter it here with your new password.',
+    passwordSet: 'Password changed, and you are signed in.',
+    errEmail: 'Enter a valid email address.',
+    errShort: 'The password needs at least 6 characters.',
+    errTaken: 'That email already has an account. Sign in instead of creating one.',
+    errWrong: 'That email and password do not match.',
+    errWeak: 'That password is too weak. Choose a longer one.',
+    errCode: 'That code is wrong or has expired. Ask for a new one.',
+    errTooMany: 'Too many attempts. Wait a little and try again.',
+    errServer: 'Something went wrong. Please try again shortly.',
     signIn: 'Sign in with Google',
     signedInAs: 'Signed in as',
     signOut: 'Sign out',
@@ -329,6 +375,124 @@ async function startTrial() {
   }
 }
 
+/* ---------------------------------------------------------- email accounts
+ *
+ * The app can make an account from an email and a password, so the website
+ * has to take one as well - somebody who signed up that way could use Jezdan
+ * but had no way to buy Pro.
+ *
+ * Four states in one form, because they ask for the same two or three things:
+ *   signin  email + password        -> in
+ *   signup  email + new password    -> in (the project auto-confirms)
+ *   reset   email                   -> emails a six-digit code
+ *   code    email + code + password -> sets the new password and signs in
+ *
+ * The password reset deliberately mirrors the app: Supabase is configured to
+ * send a code rather than a link, so the same email works for both.
+ */
+
+var MIN_PASSWORD = 6;
+var mode = 'signin';
+
+function readEmail(text) {
+  var clean = String(text == null ? '' : text).trim().toLowerCase();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(clean) ? clean : null;
+}
+
+/** Sets a button or label's wording and keeps it translatable. */
+function label(id, key) {
+  var el = document.getElementById(id);
+  el.setAttribute('data-t', key);
+  el.textContent = t(key);
+}
+
+function said(message) {
+  var el = document.getElementById('authSaid');
+  el.textContent = message || '';
+  el.hidden = !message;
+}
+
+/**
+ * Supabase names the cause in error.code and describes it in error.message,
+ * and the two do not share wording - so both are read, the same way the app
+ * does it in src/lib/authErrors.js.
+ */
+function authMessage(error) {
+  var code = String((error && error.code) || '').toLowerCase();
+  var msg = String((error && error.message) || '').toLowerCase();
+
+  if (code === 'email_exists' || code === 'user_already_exists') return t('errTaken');
+  if (code === 'invalid_credentials') return t('errWrong');
+  if (code === 'weak_password') return t('errWeak');
+  if (code === 'otp_expired') return t('errCode');
+  if (code === 'over_email_send_rate_limit' || code === 'over_request_rate_limit') return t('errTooMany');
+
+  if (/already.*(registered|exists)/.test(msg)) return t('errTaken');
+  if (/invalid login|invalid.*credentials/.test(msg)) return t('errWrong');
+  if (/password.*(short|weak|at least)/.test(msg)) return t('errWeak');
+  if (/token|otp|expired/.test(msg)) return t('errCode');
+  if (/rate limit/.test(msg)) return t('errTooMany');
+  return t('errServer');
+}
+
+function setMode(next) {
+  mode = next;
+  var wantsCode = mode === 'code';
+  var wantsPassword = mode !== 'reset';
+
+  document.getElementById('codeField').hidden = !wantsCode;
+  document.getElementById('passField').hidden = !wantsPassword;
+  document.getElementById('pass-in').setAttribute(
+    'autocomplete', mode === 'signin' ? 'current-password' : 'new-password');
+
+  label('emailGo', {
+    signin: 'emailSignIn', signup: 'emailSignUp', reset: 'sendCode', code: 'setPassword',
+  }[mode]);
+  label('toSignup', mode === 'signin' ? 'needAccount' : 'haveAccount');
+  document.getElementById('toReset').hidden = mode !== 'signin';
+  said('');
+}
+
+async function submitEmail(event) {
+  event.preventDefault();
+  var button = document.getElementById('emailGo');
+  if (button.disabled) return;
+
+  var email = readEmail(document.getElementById('email-in').value);
+  if (!email) return said(t('errEmail'));
+  var password = document.getElementById('pass-in').value;
+  if (mode !== 'reset' && password.length < MIN_PASSWORD) return said(t('errShort'));
+
+  button.disabled = true;
+  said(t('working'));
+  try {
+    if (mode === 'signin') {
+      const { error } = await client.auth.signInWithPassword({ email: email, password: password });
+      if (error) throw error;
+    } else if (mode === 'signup') {
+      const { error } = await client.auth.signUp({ email: email, password: password });
+      if (error) throw error;
+    } else if (mode === 'reset') {
+      const { error } = await client.auth.resetPasswordForEmail(email);
+      if (error) throw error;
+      setMode('code');
+      said(t('codeSent'));
+    } else {
+      // The code signs the account in, and only then can the password be set.
+      const { error } = await client.auth.verifyOtp({
+        email: email, token: document.getElementById('code-in').value.trim(), type: 'recovery',
+      });
+      if (error) throw error;
+      const changed = await client.auth.updateUser({ password: password });
+      if (changed.error) throw changed.error;
+      said(t('passwordSet'));
+    }
+  } catch (error) {
+    said(authMessage(error));
+  }
+  button.disabled = false;
+}
+
 async function checkout(plan, button) {
   if (!session) return;
   button.disabled = true;
@@ -365,6 +529,13 @@ async function showPro() {
 function render() {
   show('auth', !session);
   show('account', !!session);
+  if (!session) {
+    // Signing out puts the form back where a visitor expects to find it,
+    // rather than in whatever state it was left in beforehand.
+    setMode('signin');
+    document.getElementById('pass-in').value = '';
+    document.getElementById('code-in').value = '';
+  }
   if (session) {
     document.getElementById('email').textContent = session.user.email || '';
     drawPlans();
@@ -392,6 +563,12 @@ async function start() {
   document.getElementById('signout').addEventListener('click', async function () {
     await client.auth.signOut();
   });
+  document.getElementById('emailForm').addEventListener('submit', submitEmail);
+  document.getElementById('toSignup').addEventListener('click', function () {
+    setMode(mode === 'signin' ? 'signup' : 'signin');
+  });
+  document.getElementById('toReset').addEventListener('click', function () { setMode('reset'); });
+  setMode('signin');
   client.auth.onAuthStateChange(function (_event, next) {
     session = next;
     render();

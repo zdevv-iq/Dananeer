@@ -114,8 +114,34 @@
   </div>
 
   <section id="auth" class="card">
-    <p data-t="signInWhy">سجّل الدخول بحساب Google الذي تستخدمه في التطبيق، حتى يُفعَّل Pro على نفس الحساب.</p>
+    <p data-t="signInWhy">سجّل الدخول بنفس الحساب الذي تستخدمه في التطبيق، حتى يُفعَّل Pro على نفس الحساب.</p>
     <button type="button" id="signin" class="primary" data-t="signIn">تسجيل الدخول بحساب Google</button>
+
+    <div class="or"><span data-t="or">أو</span></div>
+
+    <!-- The app lets people make an account with an email, so the site has to
+         accept one too - otherwise they can use Jezdan but cannot buy Pro. -->
+    <form id="emailForm" class="fields" novalidate>
+      <label class="field">
+        <span data-t="emailLabel">البريد الإلكتروني</span>
+        <input id="email-in" type="email" autocomplete="email" spellcheck="false">
+      </label>
+      <label class="field" id="codeField" hidden>
+        <span data-t="codeLabel">الرمز المُرسل إلى بريدك</span>
+        <input id="code-in" type="text" inputmode="numeric" autocomplete="one-time-code">
+      </label>
+      <label class="field" id="passField">
+        <span data-t="passLabel">كلمة السر</span>
+        <input id="pass-in" type="password" autocomplete="current-password">
+      </label>
+      <p id="authSaid" class="status" hidden></p>
+      <button type="submit" id="emailGo" class="primary" data-t="emailSignIn">تسجيل الدخول</button>
+    </form>
+
+    <p class="switcher">
+      <button type="button" id="toSignup" class="linklike" data-t="needAccount">ما عندك حساب؟ سوِّ واحد</button>
+      <button type="button" id="toReset" class="linklike" data-t="forgot">نسيت كلمة السر؟</button>
+    </p>
   </section>
 
   <section id="account" class="card" hidden>
