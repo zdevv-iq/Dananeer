@@ -29,6 +29,13 @@
 
 * { box-sizing: border-box; }
 
+/* Any rule that sets display - .field is grid, button is inline-block - beats
+   the browser's own [hidden] { display: none }, because a class or element
+   selector outranks it. So hiding something from JavaScript silently stopped
+   working, and the reset-code field sat on the page from the first load.
+   This settles it for every element that carries the attribute. */
+[hidden] { display: none !important; }
+
 html { -webkit-text-size-adjust: 100%; }
 
 body {
