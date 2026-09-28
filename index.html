@@ -3,195 +3,122 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>جزدان — مدبّر مصروفك</title>
-<meta name="description" content="جزدان: اكتب شنو صرفت وهو يسجّلها بالفئة الصحيحة. بالعربي والإنكليزي، دينار ودولار، ويشتغل بدون إنترنت.">
-<link rel="icon" href="icon.png">
-<link rel="canonical" href="https://jezdan.app/">
+<title>شكرًا لك</title>
+<link rel="icon" href="../icon.png">
 <meta name="theme-color" content="#09090B">
-<!-- What WhatsApp, Instagram and Telegram show when someone shares the link. -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="جزدان">
-<meta property="og:title" content="جزدان — مدبّر مصروفك">
-<meta property="og:description" content="اكتب شنو صرفت وهو يسجّلها بالفئة الصحيحة. بالعربي والإنكليزي، دينار ودولار، ويشتغل بدون إنترنت.">
-<meta property="og:url" content="https://jezdan.app/">
-<meta property="og:image" content="https://jezdan.app/icon.png">
-<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="site.css?v=48ea0408">
+<link rel="stylesheet" href="../site.css?v=48ea0408">
 </head>
 <body>
-<main class="wide">
-
+<main>
   <nav>
-    <span class="brand"><img src="icon.png" alt=""> <span data-t="brand">جزدان</span></span>
-    <button type="button" id="lang" class="ghost" data-t="langSwitch">English</button>
+    <span class="brand"><img src="../icon.png" alt=""> <span id="brand">جزدان</span></span>
+    <button type="button" id="lang" class="ghost">English</button>
   </nav>
 
-  <!-- ------------------------------------------------------------- hero -->
-  <section class="hero">
-    <div>
-      <span class="eyebrow" data-t="eyebrow">مجاني · بالعربي والإنكليزي</span>
-      <h1 data-t="heroTitle">اكتب شنو صرفت، والباقي عليه</h1>
-      <p class="lede" data-t="heroLede">جزدان مدبّر مصروفك: اكتبله «٢٥ الف غدا» بالعربي أو بالإنكليزي، ويسجّلها بالفئة والحساب الصحيح. يشتغل بدون إنترنت، وفلوسك تبقى بجهازك.</p>
-      <div class="cta-row">
-        <a class="btn btn-primary" id="getapp" href="#pro" data-t="getApp">نزّله من Google Play</a>
-        <a class="btn btn-ghost" href="#pro" data-t="seePro">شوف Pro</a>
-      </div>
-      <p class="cta-note" data-t="ctaNote">التطبيق مجاني. Pro اختياري.</p>
-    </div>
-    <div class="feature-art">
-      <div class="phone phone-lg">
-        <img src="shot-1.png" width="540" height="1200" alt="" fetchpriority="high">
-      </div>
-    </div>
+  <h1 id="head">وصلت دفعتك</h1>
+  <p class="lede" id="lede">يجري الآن تفعيل Pro على حسابك. عادة يستغرق أقل من دقيقة.</p>
+
+  <section class="card">
+    <p id="status">جارٍ التحقق…</p>
+    <ol id="steps">
+      <li>افتح تطبيق جزدان على هاتفك.</li>
+      <li>من الإعدادات، سجّل الدخول بنفس حساب Google.</li>
+      <li>ستجد ميزات Pro مفعَّلة.</li>
+    </ol>
+    <p class="fine" id="fine">إذا لم يُفعَّل خلال بضع دقائق، راسلنا على dananeer.app@gmail.com وأرفق وصل الدفع.</p>
   </section>
-
-  <div class="strip">
-    <div><b data-t="t1h">فلوسك تبقى عندك</b><span data-t="t1b">ما يُرفع شي للسيرفر إلا إذا شغّلت النسخ الاحتياطي بنفسك.</span></div>
-    <div><b data-t="t2h">دينار ودولار سوا</b><span data-t="t2b">١٥٤ عملة، مكتوبة بالطريقة المحلية.</span></div>
-    <div><b data-t="t3h">بدون إعلانات</b><span data-t="t3b">ولا نبيع بياناتك لأي جهة.</span></div>
-  </div>
-
-  <!-- --------------------------------------------------------- features -->
-  <div class="section-head">
-    <h2 data-t="whatTitle">شنو يسوي</h2>
-    <p data-t="whatSub">كل اللي بهذا القسم مجاني، بدون اشتراك.</p>
-  </div>
-
-  <section class="feature">
-    <div>
-      <h2 data-t="f1h">تكلّم وياه مثل ما تكتب لصاحبك</h2>
-      <p data-t="f1p">ما بيه استمارات ولا خانات. تكتب الجملة، وهو يفهم المبلغ والفئة والحساب. يشتغل بدون إنترنت، لأن القراءة تصير على التلفون نفسه.</p>
-      <ul>
-        <li data-t="f1a">«٢٥ الف غدا»</li>
-        <li data-t="f1b">«دفعت ٣٠٠ الف ايجار»</li>
-        <li data-t="f1c">«قبضت الراتب»</li>
-      </ul>
-    </div>
-    <div class="feature-art"><div class="phone"><img src="shot-3.png" width="540" height="1200" alt="" loading="lazy"></div></div>
-  </section>
-
-  <section class="feature flip">
-    <div>
-      <h2 data-t="f2h">شوف وين تروح فلوسك</h2>
-      <p data-t="f2p">رصيدك بكل الحسابات — كاش، زين كاش، بنك — وهذا الشهر مقابل خطتك، وأهداف الادخار والديون والأقساط، بصفحة وحدة.</p>
-    </div>
-    <div class="feature-art"><div class="phone"><img src="shot-2.png" width="540" height="1200" alt="" loading="lazy"></div></div>
-  </section>
-
-  <section class="feature">
-    <div>
-      <h2 data-t="f3h">اعرف عاداتك</h2>
-      <p data-t="f3p">رسم يومي، وفئاتك مرتبة، والشهر الماضي جنب هذا الشهر. ويقلّك الشي اللي ما تنتبهله: «البنزين ٣٧٪ من مصروفك هالشهر».</p>
-    </div>
-    <div class="feature-art"><div class="phone"><img src="shot-4.png" width="540" height="1200" alt="" loading="lazy"></div></div>
-  </section>
-
-  <div class="grid">
-    <div class="tile"><b data-t="g1h">ميزانية لكل فئة</b><span data-t="g1b">حدّد سقف، ويخبرك قبل ما تتجاوزه.</span></div>
-    <div class="tile"><b data-t="g2h">أهداف ادخار</b><span data-t="g2b">جمّع لهدف وشوف شكد باقي عليه.</span></div>
-    <div class="tile"><b data-t="g3h">ديون وأقساط</b><span data-t="g3b">منو يريدلك، وشكد قسط هذا الشهر.</span></div>
-    <div class="tile"><b data-t="g4h">فواتير متكررة</b><span data-t="g4b">الإيجار والاشتراكات تنسجل بوكتها.</span></div>
-    <div class="tile"><b data-t="g5h">جرد الكاش</b><span data-t="g5b">عدّ اللي بجيبك، وهو يسوّي الفرق.</span></div>
-    <div class="tile"><b data-t="g6h">قفل بالبصمة</b><span data-t="g6b">ما يفتح إلا بيك.</span></div>
-  </div>
-
-  <!-- -------------------------------------------------------------- pro -->
-  <div class="section-head" id="pro">
-    <h2 data-t="proTitle">جزدان Pro</h2>
-    <p data-t="proSub">يضيف الأشياء اللي تحتاج ذكاء اصطناعي وسيرفر. الباقي يبقى مجاني.</p>
-  </div>
-
-  <div class="grid">
-    <div class="tile"><b data-t="p1h">🎤 رسائل صوتية</b><span data-t="p1b">قول شنو صرفت وينسجل.</span></div>
-    <div class="tile"><b data-t="p2h">🧾 صوّر الإيصال</b><span data-t="p2b">يقرأ المبلغ ويسجّله.</span></div>
-    <div class="tile"><b data-t="p3h">🧠 ذكاء اصطناعي</b><span data-t="p3b">يفهم أي أسلوب كتابة، حتى الصعب.</span></div>
-    <div class="tile"><b data-t="p4h">💬 اسأل عن فلوسك</b><span data-t="p4b">«شكد صرفت على الأكل هالشهر؟»</span></div>
-    <div class="tile"><b data-t="p5h">☁️ نسخة احتياطية</b><span data-t="p5b">بدّل تلفونك وبياناتك وياك.</span></div>
-    <div class="tile"><b data-t="p6h">🏠 حساب البيت</b><span data-t="p6b">شارك الدفتر مع أهل بيتك.</span></div>
-  </div>
-
-  <section id="auth" class="card">
-    <p data-t="signInWhy">سجّل الدخول بنفس الحساب الذي تستخدمه في التطبيق، حتى يُفعَّل Pro على نفس الحساب.</p>
-    <button type="button" id="signin" class="primary" data-t="signIn">تسجيل الدخول بحساب Google</button>
-
-    <div class="or"><span data-t="or">أو</span></div>
-
-    <!-- The app lets people make an account with an email, so the site has to
-         accept one too - otherwise they can use Jezdan but cannot buy Pro. -->
-    <form id="emailForm" class="fields" novalidate>
-      <label class="field">
-        <span data-t="emailLabel">البريد الإلكتروني</span>
-        <input id="email-in" type="email" autocomplete="email" spellcheck="false">
-      </label>
-      <label class="field" id="codeField" hidden>
-        <span data-t="codeLabel">الرمز المُرسل إلى بريدك</span>
-        <input id="code-in" type="text" inputmode="numeric" autocomplete="one-time-code">
-      </label>
-      <label class="field" id="passField">
-        <span data-t="passLabel">كلمة السر</span>
-        <input id="pass-in" type="password" autocomplete="current-password">
-      </label>
-      <p id="authSaid" class="status" hidden></p>
-      <button type="submit" id="emailGo" class="primary" data-t="emailSignIn">تسجيل الدخول</button>
-    </form>
-
-    <p class="switcher">
-      <button type="button" id="toSignup" class="linklike" data-t="needAccount">ما عندك حساب؟ سوِّ واحد</button>
-      <button type="button" id="toReset" class="linklike" data-t="forgot">نسيت كلمة السر؟</button>
-    </p>
-  </section>
-
-  <section id="account" class="card" hidden>
-    <p class="who"><span data-t="signedInAs">مسجّل الدخول باسم</span> <strong id="email"></strong>
-      · <button type="button" id="signout" class="linklike" data-t="signOut">تسجيل الخروج</button></p>
-    <p id="status" class="status" hidden></p>
-    <div id="trial" class="trial" hidden>
-      <p class="trial-head" data-t="trialHead">جرّب Pro أسبوع مجانًا</p>
-      <p class="trial-sub" data-t="trialSub">سبعة أيام كاملة، مرة وحدة لكل حساب، وبدون بطاقة.</p>
-      <button type="button" id="trialBtn" class="primary" data-t="trialStart">ابدأ الأسبوع المجاني</button>
-    </div>
-    <div id="plans" class="plans"></div>
-    <p class="fine" data-t="fine">بعد الدفع افتح التطبيق وسجّل الدخول بنفس حساب Google. إذا كان لديك اشتراك فعّال، تُضاف المدة الجديدة إلى ما تبقى لك.</p>
-  </section>
-
-  <!-- -------------------------------------------------------------- faq -->
-  <div class="section-head">
-    <h2 data-t="faqTitle">أسئلة</h2>
-  </div>
-  <div class="faq">
-    <details>
-      <summary data-t="q1">التطبيق مجاني؟</summary>
-      <p data-t="a1">إي. التسجيل والفئات والميزانيات والتقارير والعملات — كلها مجانية وبدون حد. Pro يضيف الصوت وقراءة الإيصالات والذكاء الاصطناعي والنسخة الاحتياطية.</p>
-    </details>
-    <details>
-      <summary data-t="q2">شلون أدفع؟</summary>
-      <p data-t="a2">بالدينار العراقي عبر زين كاش أو كي كارد أو FIB أو البطاقة. الدفع يصير بهذا الموقع، وPro يشتغل بالتطبيق على نفس حساب Google.</p>
-    </details>
-    <details>
-      <summary data-t="q3">يشتغل بدون إنترنت؟</summary>
-      <p data-t="a3">إي. التسجيل والقراءة والتقارير كلها على التلفون. الإنترنت يلزم بس لمزايا Pro اللي تحتاج سيرفر.</p>
-    </details>
-    <details>
-      <summary data-t="q4">إذا بدّلت تلفوني؟</summary>
-      <p data-t="a4">مع Pro تنحفظ نسخة بحسابك وترجعها بالتلفون الجديد. الاسترجاع مجاني دائمًا، حتى لو انتهى اشتراكك.</p>
-    </details>
-    <details>
-      <summary data-t="q5">بياناتي وين تروح؟</summary>
-      <p data-t="a5">تبقى بجهازك. ما يُرفع شي إلا إذا شغّلت النسخ الاحتياطي بنفسك، وتكدر تحذف كل شي من الإعدادات بأي وكت.</p>
-    </details>
-  </div>
 
   <footer>
-    <a href="privacy.html" data-t="privacy">سياسة الخصوصية</a>
-    <a href="delete-account.html" data-t="deleteData">حذف بياناتك</a>
+    <a href="../index.html" id="backLink">الرئيسية</a>
+    <a href="../privacy.html" id="privacyLink">سياسة الخصوصية</a>
     <a href="mailto:dananeer.app@gmail.com">dananeer.app@gmail.com</a>
   </footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
-<script src="config.js?v=99340676"></script>
-<script src="pay.js?v=eddf4637"></script>
+<script src="../config.js?v=99340676"></script>
+<script>
+/**
+ * Where Wayl sends the customer after paying. Pro is granted by the server
+ * when Wayl confirms the payment, so this page only waits for that to land and
+ * says what to do next. It never grants anything itself.
+ */
+(function () {
+  var TEXT = {
+    ar: {
+      lang: 'English', brand: 'جزدان', title: 'شكرًا لك', head: 'وصلت دفعتك', lede: 'يجري الآن تفعيل Pro على حسابك. عادة يستغرق أقل من دقيقة.',
+      checking: 'جارٍ التحقق…',
+      done: 'تم التفعيل. Pro مفعَّل حتى {date}.',
+      waiting: 'لم يصلنا تأكيد الدفع بعد. اترك الصفحة مفتوحة لحظة.',
+      signIn: 'سجّل الدخول بحساب Google لعرض حالة اشتراكك.',
+      steps: ['افتح تطبيق جزدان على هاتفك.', 'من الإعدادات، سجّل الدخول بنفس حساب Google.', 'ستجد ميزات Pro مفعَّلة.'],
+      fine: 'إذا لم يُفعَّل خلال بضع دقائق، راسلنا على dananeer.app@gmail.com وأرفق وصل الدفع.',
+      back: 'الرئيسية', privacy: 'سياسة الخصوصية',
+    },
+    en: {
+      lang: 'العربية', brand: 'Jezdan', title: 'Thank you', head: 'Payment received', lede: 'Pro is being switched on for your account. This usually takes under a minute.',
+      checking: 'Checking…',
+      done: 'Done. Pro is active until {date}.',
+      waiting: 'The payment confirmation has not arrived yet. Keep this page open a moment.',
+      signIn: 'Sign in with Google to see your subscription.',
+      steps: ['Open Jezdan on your phone.', 'In Settings, sign in with the same Google account.', 'The Pro features are on.'],
+      fine: 'If it is not on after a few minutes, email dananeer.app@gmail.com with your payment receipt.',
+      back: 'Home', privacy: 'Privacy policy',
+    },
+  };
+  var lang = localStorage.getItem('dananeer.lang') || 'ar';
+  var client = window.supabase.createClient(window.DANANEER_CONFIG.supabaseUrl, window.DANANEER_CONFIG.supabaseAnonKey);
+  var reference = new URLSearchParams(location.search).get('referenceId');
+  var tries = 0;
+
+  function t(key) { return (TEXT[lang] || TEXT.en)[key]; }
+  function paint() {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.title = t('title');
+    document.getElementById('brand').textContent = t('brand');
+    document.getElementById('lang').textContent = t('lang');
+    document.getElementById('head').textContent = t('head');
+    document.getElementById('lede').textContent = t('lede');
+    document.getElementById('fine').textContent = t('fine');
+    document.getElementById('backLink').textContent = t('back');
+    document.getElementById('privacyLink').textContent = t('privacy');
+    var steps = document.getElementById('steps');
+    steps.textContent = '';
+    t('steps').forEach(function (s) { var li = document.createElement('li'); li.textContent = s; steps.appendChild(li); });
+  }
+  function say(text) { document.getElementById('status').textContent = text; }
+
+  async function check() {
+    var session = (await client.auth.getSession()).data.session;
+    if (!session) return say(t('signIn'));
+    var query = client.from('pro_orders').select('status, granted_until').eq('status', 'paid');
+    if (reference) query = client.from('pro_orders').select('status, granted_until').eq('reference_id', reference);
+    var res = await query.order('granted_until', { ascending: false }).limit(1);
+    var row = res.data && res.data[0];
+    if (row && row.status === 'paid' && row.granted_until) {
+      var when = new Date(row.granted_until);
+      return say(t('done').replace('{date}', when.toLocaleDateString(lang === 'ar' ? 'ar-IQ' : 'en-GB', { year: 'numeric', month: 'long', day: 'numeric' })));
+    }
+    say(t('waiting'));
+    if (tries++ < 20) setTimeout(check, 3000);   // Wayl's webhook is usually seconds away
+  }
+
+  document.getElementById('lang').addEventListener('click', function () {
+    lang = lang === 'ar' ? 'en' : 'ar';
+    localStorage.setItem('dananeer.lang', lang);
+    paint();
+    say(t('checking'));
+    check();
+  });
+
+  paint();
+  say(t('checking'));
+  check();
+})();
+</script>
 </body>
 </html>
