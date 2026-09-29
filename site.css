@@ -276,6 +276,78 @@ article + article { border-top: 1px solid var(--line); margin-top: 48px; padding
 .features { list-style: none; padding: 0; margin: 0 0 32px; }
 .features li { padding: 7px 0; }
 
+/* ------------------------------------------------------------------ motion
+ *
+ * Enough movement to make the page feel alive, and little enough that nobody
+ * waits for it. Everything here is decoration: the page is complete and
+ * readable with all of it switched off, which is exactly what happens for
+ * someone who has asked their system for less motion.
+ */
+
+/* Anchors glide rather than jump, so it is clear where you have been taken. */
+html { scroll-behavior: smooth; }
+
+/* The header stays with you down a long page, frosted over the content. */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  margin-inline: -16px;
+  padding-inline: 16px;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* The hero arrives a beat at a time, top down, so the eye is led rather than
+   handed everything at once. */
+.hero > div > * { animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.hero .eyebrow { animation-delay: 0.05s; }
+.hero h1 { animation-delay: 0.12s; }
+.hero .lede { animation-delay: 0.19s; }
+.hero .cta-row { animation-delay: 0.26s; }
+.hero .cta-note { animation-delay: 0.33s; }
+.hero .feature-art { animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards; }
+
+/* Everything below the fold waits until it is nearly in view. The class is
+   added by the page; without JavaScript the content simply shows, because
+   .reveal on its own is only a starting point that never gets set. */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal.seen { opacity: 1; transform: none; }
+
+/* A phone held still looks like a screenshot; a phone that breathes looks
+   like a device. Six seconds is slow enough not to be noticed directly. */
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.phone { animation: float 6s ease-in-out infinite; }
+.feature-art .phone { animation-duration: 7s; }
+.feature:nth-of-type(even) .phone { animation-delay: -3s; }
+
+/* Things you can press answer when the pointer is over them. */
+.tile, .plan, .strip div { transition: transform 0.2s ease, border-color 0.2s ease; }
+@media (hover: hover) {
+  .tile:hover, .strip div:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .plan:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .btn-primary:hover, .primary:hover { transform: translateY(-2px); }
+  .btn-ghost:hover { border-color: var(--accent); }
+}
+
+/* Keyboard users get the same outline everywhere, and a visible one. */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+.faq details { transition: background 0.2s ease; }
+.faq details[open] { background: color-mix(in srgb, var(--accent) 5%, transparent); }
+
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; }
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  /* Whatever the reveal was waiting for, it is not waiting any more. */
+  .reveal { opacity: 1 !important; transform: none !important; }
 }
