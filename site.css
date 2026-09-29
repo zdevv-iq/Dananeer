@@ -306,7 +306,10 @@ nav {
 
 /* The hero arrives a beat at a time, top down, so the eye is led rather than
    handed everything at once. */
-.hero > div > * { animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+/* :first-child keeps this to the words. Without it the selector also reaches
+   the phone inside .feature-art and - being one specificity point heavier
+   than .phone - replaced its drift with a single entrance. */
+.hero > div:first-child > * { animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
 .hero .eyebrow { animation-delay: 0.05s; }
 .hero h1 { animation-delay: 0.12s; }
 .hero .lede { animation-delay: 0.19s; }
@@ -317,23 +320,100 @@ nav {
 /* Everything below the fold waits until it is nearly in view. The class is
    added by the page; without JavaScript the content simply shows, because
    .reveal on its own is only a starting point that never gets set. */
-.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal {
+  opacity: 0;
+  transform: translateY(40px) scale(0.97);
+  transition: opacity 0.8s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
 .reveal.seen { opacity: 1; transform: none; }
+
+/* Children arrive one after another rather than as a block. The index is set
+   by the page; without it every child simply shares the same delay of zero. */
+.reveal > * { transition-delay: calc(var(--i, 0) * 70ms); }
+.reveal.seen .tile,
+.reveal.seen .plan,
+.reveal.seen > div { animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+
+/* A thin gold line across the top saying how far down the page you are. */
+#progress {
+  position: fixed; inset-block-start: 0; inset-inline-start: 0;
+  height: 3px; width: 0;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 40%, transparent));
+  z-index: 50;
+  transition: width 0.1s linear;
+}
+
+/* The headline carries the brand's gold through it, moving slowly, so the
+   first thing on the page is not flat. */
+@keyframes sheen { to { background-position: 200% center; } }
+/* Matched the same way as the stagger rule above, and after it, so the
+   headline keeps both its entrance and its moving gold rather than having
+   the shorter selector overruled. */
+.hero > div:first-child > h1 {
+  background: linear-gradient(100deg,
+    var(--text) 0%, var(--text) 35%,
+    var(--accent) 50%,
+    var(--text) 65%, var(--text) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.12s backwards,
+             sheen 6s linear 1.2s infinite;
+}
+
+/* The pool of colour behind the top of the page breathes. */
+@keyframes breathe { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+body::before {
+  content: "";
+  position: fixed; inset-block-start: -200px; inset-inline: 0;
+  height: 620px; z-index: -1; pointer-events: none;
+  background: radial-gradient(50% 300px at 50% 200px, var(--glow), transparent 70%);
+  animation: breathe 7s ease-in-out infinite;
+}
+
+/* A light travels across a primary button when the pointer is on it. */
+.btn-primary, .primary { position: relative; overflow: hidden; }
+.btn-primary::after, .primary::after {
+  content: "";
+  position: absolute; inset-block: 0; inset-inline-start: -60%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  transition: inset-inline-start 0.55s ease;
+}
+@media (hover: hover) {
+  .btn-primary:hover::after, .primary:hover::after { inset-inline-start: 120%; }
+}
 
 /* A phone held still looks like a screenshot; a phone that breathes looks
    like a device. Six seconds is slow enough not to be noticed directly. */
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-.phone { animation: float 6s ease-in-out infinite; }
-.feature-art .phone { animation-duration: 7s; }
-.feature:nth-of-type(even) .phone { animation-delay: -3s; }
+/* A phone held still looks like a screenshot. This one drifts and tips a
+   little, which reads as a device someone is holding. */
+@keyframes drift {
+  0%, 100% { transform: translateY(0) rotate(-1.2deg); }
+  50% { transform: translateY(-22px) rotate(1.2deg); }
+}
+.phone { animation: drift 7s ease-in-out infinite; will-change: transform; }
+.hero .phone { animation-duration: 8s; }
+.feature:nth-of-type(even) .phone { animation-delay: -3.5s; }
 
 /* Things you can press answer when the pointer is over them. */
-.tile, .plan, .strip div { transition: transform 0.2s ease, border-color 0.2s ease; }
+.tile, .plan, .strip div {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
 @media (hover: hover) {
-  .tile:hover, .strip div:hover { transform: translateY(-3px); border-color: var(--accent); }
-  .plan:hover { transform: translateY(-3px); border-color: var(--accent); }
-  .btn-primary:hover, .primary:hover { transform: translateY(-2px); }
-  .btn-ghost:hover { border-color: var(--accent); }
+  .tile:hover, .strip div:hover, .plan:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+  .btn-primary:hover, .primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .phone:hover { animation-play-state: paused; }
 }
 
 /* Keyboard users get the same outline everywhere, and a visible one. */
@@ -349,5 +429,11 @@ nav {
     animation: none !important;
   }
   /* Whatever the reveal was waiting for, it is not waiting any more. */
-  .reveal { opacity: 1 !important; transform: none !important; }
+  .reveal, .reveal > * { opacity: 1 !important; transform: none !important; }
+  /* The headline is painted through a moving gradient; with the animation off
+     it would sit there as transparent text on a static gradient, so it goes
+     back to being ordinary words. */
+  .hero > div:first-child > h1 { background: none; color: var(--text); -webkit-text-fill-color: currentColor; }
+  #progress { display: none; }
+  body::before { opacity: 0.8; }
 }

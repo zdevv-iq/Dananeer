@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="site.css?v=77a10444">
+<link rel="stylesheet" href="site.css?v=d1150363">
 </head>
 <body>
 <main class="wide">
@@ -207,7 +207,23 @@
   var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (still || !('IntersectionObserver' in window)) return;
 
-  for (var i = 0; i < blocks.length; i++) blocks[i].classList.add('reveal');
+  // A thin line across the top showing how far down the page you are.
+  var progress = document.createElement('div');
+  progress.id = 'progress';
+  document.body.appendChild(progress);
+  function trackScroll() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', trackScroll, { passive: true });
+  trackScroll();
+
+  for (var i = 0; i < blocks.length; i++) {
+    blocks[i].classList.add('reveal');
+    // Children come in one after another rather than as a slab.
+    var kids = blocks[i].children;
+    for (var c = 0; c < kids.length; c++) kids[c].style.setProperty('--i', c);
+  }
 
   function show(el) { el.classList.add('seen'); }
 
