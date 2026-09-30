@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="site.css?v=d1150363">
+<link rel="stylesheet" href="site.css?v=9c9a04c9">
 </head>
 <body>
 <main class="wide">
@@ -32,7 +32,6 @@
   <!-- ------------------------------------------------------------- hero -->
   <section class="hero">
     <div>
-      <span class="eyebrow" data-t="eyebrow">مجاني · بالعربي والإنكليزي</span>
       <h1 data-t="heroTitle">اكتب شنو صرفت، والباقي عليه</h1>
       <p class="lede" data-t="heroLede">جزدان مدبّر مصروفك: اكتبله «٢٥ الف غدا» بالعربي أو بالإنكليزي، ويسجّلها بالفئة والحساب الصحيح. يشتغل بدون إنترنت، وفلوسك تبقى بجهازك.</p>
       <div class="cta-row">
@@ -98,20 +97,40 @@
     <div class="tile"><b data-t="g6h">قفل بالبصمة</b><span data-t="g6b">ما يفتح إلا بيك.</span></div>
   </div>
 
-  <!-- -------------------------------------------------------------- pro -->
-  <div class="section-head" id="pro">
-    <h2 data-t="proTitle">جزدان Pro</h2>
-    <p data-t="proSub">يضيف الأشياء اللي تحتاج ذكاء اصطناعي وسيرفر. الباقي يبقى مجاني.</p>
-  </div>
+  <!-- -------------------------------------------------------------- pro
+       The band inverts the page. Everything above it is light and evenly
+       paced; Pro arrives as a block of ink that the brand owns outright, and
+       the prices sit inside it so the pitch and the decision share one
+       surface. The icons are drawn here rather than pulled from a library:
+       six paths on one 24px grid at one stroke weight is smaller than any
+       icon font and cannot fall back to a missing glyph. -->
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+    <defs>
+      <g id="i-mic"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></g>
+      <g id="i-receipt"><path d="M6 3h12v18l-2.5-1.7L13 21l-2.5-1.7L8 21l-2-1.5V3Z"/><path d="M9.5 8.5h5M9.5 12.5h5"/></g>
+      <g id="i-spark"><path d="M12 3.5 13.8 9.2 19.5 11l-5.7 1.8L12 18.5l-1.8-5.7L4.5 11l5.7-1.8L12 3.5Z"/><path d="M18.75 3.5v3M20.25 5h-3"/></g>
+      <g id="i-chat"><path d="M20.5 12.2a7.6 7.6 0 0 1-11.1 6.8L4.5 20.5l1.5-4.7A7.6 7.6 0 1 1 20.5 12.2Z"/></g>
+      <g id="i-cloud"><path d="M7.5 19.5a4.6 4.6 0 0 1-.4-9.2 6.1 6.1 0 0 1 11.6 1.6 4.1 4.1 0 0 1-1.2 7.6H7.5Z"/><path d="M12 16.5v-5.2M9.7 13.1 12 10.8l2.3 2.3"/></g>
+      <g id="i-home"><path d="M3.8 10.4 12 3.6l8.2 6.8V20a1 1 0 0 1-1 1H4.8a1 1 0 0 1-1-1v-9.6Z"/><path d="M9.4 21v-6.2h5.2V21"/></g>
+    </defs>
+  </svg>
 
-  <div class="grid">
-    <div class="tile"><b data-t="p1h">🎤 رسائل صوتية</b><span data-t="p1b">قول شنو صرفت وينسجل.</span></div>
-    <div class="tile"><b data-t="p2h">🧾 صوّر الإيصال</b><span data-t="p2b">يقرأ المبلغ ويسجّله.</span></div>
-    <div class="tile"><b data-t="p3h">🧠 ذكاء اصطناعي</b><span data-t="p3b">يفهم أي أسلوب كتابة، حتى الصعب.</span></div>
-    <div class="tile"><b data-t="p4h">💬 اسأل عن فلوسك</b><span data-t="p4b">«شكد صرفت على الأكل هالشهر؟»</span></div>
-    <div class="tile"><b data-t="p5h">☁️ نسخة احتياطية</b><span data-t="p5b">بدّل تلفونك وبياناتك وياك.</span></div>
-    <div class="tile"><b data-t="p6h">🏠 حساب البيت</b><span data-t="p6b">شارك الدفتر مع أهل بيتك.</span></div>
-  </div>
+  <div class="band">
+    <div class="section-head" id="pro">
+      <h2 data-t="proTitle">جزدان Pro</h2>
+      <p data-t="proSub">يضيف الأشياء اللي تحتاج ذكاء اصطناعي وسيرفر. الباقي يبقى مجاني.</p>
+    </div>
+
+    <div class="pro-grid">
+      <div class="pro-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-mic"/></svg><b data-t="p1h">رسائل صوتية</b><span data-t="p1b">قول شنو صرفت وينسجل.</span></div>
+      <div class="pro-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-receipt"/></svg><b data-t="p2h">صوّر الإيصال</b><span data-t="p2b">يقرأ المبلغ ويسجّله.</span></div>
+      <div class="pro-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-spark"/></svg><b data-t="p3h">ذكاء اصطناعي</b><span data-t="p3b">يفهم أي أسلوب كتابة، حتى الصعب.</span></div>
+      <div class="pro-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-chat"/></svg><b data-t="p4h">اسأل عن فلوسك</b><span data-t="p4b">«شكد صرفت على الأكل هالشهر؟»</span></div>
+      <div class="pro-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-cloud"/></svg><b data-t="p5h">نسخة احتياطية</b><span data-t="p5b">بدّل تلفونك وبياناتك وياك.</span></div>
+      <div class="pro-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-home"/></svg><b data-t="p6h">حساب البيت</b><span data-t="p6b">شارك الدفتر مع أهل بيتك.</span></div>
+    </div>
+
+    <div class="pro-buy">
 
   <section id="auth" class="card">
     <p data-t="signInWhy">سجّل الدخول بنفس الحساب الذي تستخدمه في التطبيق، حتى يُفعَّل Pro على نفس الحساب.</p>
@@ -157,6 +176,9 @@
     <p class="fine" data-t="fine">بعد الدفع افتح التطبيق وسجّل الدخول بنفس حساب Google. إذا كان لديك اشتراك فعّال، تُضاف المدة الجديدة إلى ما تبقى لك.</p>
   </section>
 
+    </div><!-- /.pro-buy -->
+  </div><!-- /.band -->
+
   <!-- -------------------------------------------------------------- faq -->
   <div class="section-head">
     <h2 data-t="faqTitle">أسئلة</h2>
@@ -201,7 +223,16 @@
  * sells something.
  */
 (function () {
-  var blocks = document.querySelectorAll('.strip, .section-head, .feature, .grid, .card, .faq, footer');
+  var all = document.querySelectorAll('.strip, .section-head, .feature, .grid, .band, .card, .faq, footer');
+  // The Pro band reveals as one piece - the ink wipes down and its contents
+  // follow - so the blocks inside it must not also be watched separately, or
+  // they would each fade in again inside a surface that has already arrived.
+  var blocks = [];
+  for (var n = 0; n < all.length; n++) {
+    var el = all[n];
+    if (!el.classList.contains('band') && el.closest && el.closest('.band')) continue;
+    blocks.push(el);
+  }
   if (!blocks.length) return;
 
   var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -213,7 +244,7 @@
   document.body.appendChild(progress);
   function trackScroll() {
     var max = document.documentElement.scrollHeight - window.innerHeight;
-    progress.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+    progress.style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0) + ')';
   }
   window.addEventListener('scroll', trackScroll, { passive: true });
   trackScroll();
@@ -224,6 +255,10 @@
     var kids = blocks[i].children;
     for (var c = 0; c < kids.length; c++) kids[c].style.setProperty('--i', c);
   }
+  // The band's own children are nested a level deeper than the loop above
+  // reaches, and they are what the eye lands on once the ink is down.
+  var proItems = document.querySelectorAll('.pro-item');
+  for (var p = 0; p < proItems.length; p++) proItems[p].style.setProperty('--i', p);
 
   function show(el) { el.classList.add('seen'); }
 
@@ -252,6 +287,6 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
 <script src="config.js?v=99340676"></script>
-<script src="pay.js?v=eddf4637"></script>
+<script src="pay.js?v=c0d4fb4c"></script>
 </body>
 </html>

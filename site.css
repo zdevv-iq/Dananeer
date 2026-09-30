@@ -13,17 +13,44 @@
   color-scheme: light dark;
   --bg: #FBFAF7; --text: #1A1A1E; --muted: #5C5C66; --line: #E5E1D8;
   --accent: #B07C12; --accent-text: #1A1206; --card: #FFFFFF;
+  /* The brand gold reaches 3.5:1 on the cream page - enough for a button's
+     fill or a heading, short of the 4.5:1 that small text owes a reader. So
+     text that happens to be gold uses the same hue carried down until it
+     clears the bar (4.7:1), and the gold itself stays the brand colour it is
+     everywhere else. On the dark theme and inside the Pro band the plain
+     accent is already well past the bar, so there it is simply itself. */
+  --accent-ink: #946910;
   --raise: #F3F1EC;
   --glow: rgba(176, 124, 18, 0.10);
   --shadow: 0 1px 2px rgba(26, 18, 6, 0.04), 0 8px 24px rgba(26, 18, 6, 0.06);
+  --rim: var(--line);
+  --lift: 0 2px 4px rgba(26, 18, 6, 0.05), 0 24px 56px rgba(26, 18, 6, 0.13);
+
+  /* The Pro band inverts the page. Rather than invent a colour for it, it
+     borrows the dark theme's own surface and gold, so the band looks the same
+     in both themes and a reader who switches never meets a new palette. */
+  --ink: #0B0B0E;
+  --ink-text: #F5F5F7;
+  --ink-muted: #A8A29A;
+  --ink-line: #2A2A31;
+  --ink-accent: #F2BE3C;
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #09090B; --text: #F5F5F7; --muted: #A1A1AA; --line: #27272D;
     --accent: #F2BE3C; --accent-text: #1A1206; --card: #141417;
+    --accent-ink: #F2BE3C;
     --raise: #1E1E23;
     --glow: rgba(242, 190, 60, 0.13);
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.35);
+    --lift: 0 20px 48px rgba(0, 0, 0, 0.65);
+    /* A drop shadow separates nothing on a near-black page, so the device is
+       held off the background by its own edge instead. */
+    --rim: #3C3C46;
+    /* In the dark theme the band is a shade lighter than the page, so it
+       still separates - inverting an already-dark page means lifting it. */
+    --ink: #1B1B21;
+    --ink-line: #3A3A44;
   }
 }
 
@@ -46,41 +73,70 @@ body {
      and widens the document, which in Arabic shunts the whole page sideways.
      A background cannot overflow anything. */
   background:
-    radial-gradient(60% 420px at 50% -60px, var(--glow), transparent 70%)
+    radial-gradient(70% 560px at 50% -80px, var(--glow), transparent 72%)
     no-repeat,
     var(--bg);
   color: var(--text);
   font-family: "IBM Plex Sans Arabic", "IBM Plex Sans", system-ui, -apple-system,
     "Segoe UI", Tahoma, "Noto Naskh Arabic", sans-serif;
-  font-size: 16px;
-  line-height: 1.65;
+  font-size: 17px;
+  line-height: 1.6;
   overflow-x: hidden;
 }
 
 /* The policy pages are for reading, so they keep the narrow measure; the
    landing page opens out to hold the screenshots beside the words. */
 main { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
-main.wide { max-width: 1060px; }
+main.wide { max-width: 1120px; padding-bottom: 0; }
 
 /* height: auto matters: the <img> tags carry width and height attributes so
    the browser reserves the right space before the file arrives, and without
    this the CSS width would fight the attribute and stretch them. */
 img { max-width: 100%; height: auto; display: block; }
 
-a { color: var(--accent); text-underline-offset: 3px; }
+a { color: var(--accent-ink); text-underline-offset: 3px; }
 a:hover { text-decoration-thickness: 2px; }
 
-h1 { font-size: clamp(30px, 7vw, 46px); line-height: 1.15; margin: 0 0 14px; letter-spacing: -0.02em; }
-h2 { font-size: clamp(22px, 4vw, 28px); line-height: 1.25; margin: 0 0 10px; letter-spacing: -0.01em; }
-h3 { font-size: 17px; margin: 24px 0 8px; }
+/* ------------------------------------------------------------------- type
+ *
+ * Display sizes are set in vw with a clamp, so the headline is the same
+ * gesture on a phone and on a desk rather than one size that had to suit
+ * both. The ceiling is 6rem; past that a line of Arabic stops being a
+ * headline and becomes a banner.
+ *
+ * Tracking is negative only in English. Arabic is a joined script: pulling
+ * the letters together fights the connections the typeface already draws,
+ * and at display size it reads as a fault rather than as tightness. So the
+ * tracking rules are scoped to the language, which the page sets on <html>
+ * whenever the reader switches.
+ */
+
+h1 {
+  font-size: clamp(38px, 8.4vw, 92px);
+  line-height: 1.04; margin: 0 0 20px; font-weight: 700;
+  text-wrap: balance;
+}
+h2 {
+  font-size: clamp(27px, 4.2vw, 44px);
+  line-height: 1.12; margin: 0 0 12px; font-weight: 700;
+  text-wrap: balance;
+}
+h3 { font-size: 18px; margin: 24px 0 8px; }
 p { margin: 0 0 14px; }
-.lede { font-size: clamp(17px, 2.4vw, 19px); color: var(--muted); margin: 0 0 28px; }
+
+html[lang="en"] h1 { letter-spacing: -0.035em; }
+html[lang="en"] h2 { letter-spacing: -0.025em; }
+
+.lede {
+  font-size: clamp(18px, 2.1vw, 21px); color: var(--muted);
+  margin: 0 0 32px; max-width: 34em; line-height: 1.55;
+}
 
 /* ------------------------------------------------------------------ chrome */
 
 nav {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 16px; margin-bottom: 8px; padding: 8px 0;
+  gap: 16px; margin-bottom: 8px; padding: 10px 0;
 }
 .brand { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; }
 .brand img { width: 34px; height: 34px; border-radius: 10px; }
@@ -88,17 +144,18 @@ nav {
 footer, .site-footer {
   display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;
   color: var(--muted); font-size: 14px;
-  margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line);
+  margin-top: 56px; padding: 24px 0 48px; border-top: 1px solid var(--line);
 }
-.site-footer { margin: 0 0 24px; padding-top: 0; border-top: 0; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+.site-footer { margin: 0 0 24px; padding: 0 0 16px; border-top: 0; border-bottom: 1px solid var(--line); }
 
 /* ------------------------------------------------------------------ buttons */
 
 button, .btn {
   font: inherit; font-weight: 700; cursor: pointer;
   border-radius: 12px; border: 1px solid transparent;
-  padding: 13px 22px; text-decoration: none; display: inline-block; text-align: center;
-  transition: transform 0.08s ease, opacity 0.15s ease;
+  padding: 14px 24px; text-decoration: none; display: inline-block; text-align: center;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease,
+              opacity 0.15s ease, border-color 0.18s ease;
 }
 button:active, .btn:active { transform: translateY(1px); }
 button:disabled { opacity: 0.55; cursor: default; transform: none; }
@@ -107,100 +164,231 @@ button:disabled { opacity: 0.55; cursor: default; transform: none; }
   background: var(--accent); color: var(--accent-text); border-color: var(--accent);
 }
 .primary { width: 100%; }
+.btn-primary { font-size: 17px; padding: 16px 30px; }
 .btn-ghost, .ghost {
   background: transparent; color: var(--text);
-  border-color: var(--line); padding: 12px 20px;
+  border-color: var(--line); padding: 15px 26px;
 }
-.ghost { font-weight: 600; padding: 8px 14px; color: var(--accent); }
+.ghost { font-weight: 600; padding: 9px 16px; color: var(--accent-ink); }
 .linklike {
-  background: none; border: 0; color: var(--accent); padding: 0;
+  background: none; border: 0; color: var(--accent-ink); padding: 0;
   font-size: 14px; font-weight: 600; text-decoration: underline;
 }
 
 .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 18px; }
-.cta-note { font-size: 13px; color: var(--muted); margin: 0; }
+.cta-note { font-size: 14px; color: var(--muted); margin: 0; }
+/* Side by side the two buttons are different widths, which on a narrow screen
+   stacks them into a ragged edge. Below that width they take the full column
+   and the edge is straight. */
+@media (max-width: 540px) {
+  .cta-row { display: grid; gap: 10px; }
+  .cta-row .btn { width: 100%; }
+}
 
 /* --------------------------------------------------------------------- hero */
 
 .hero {
-  display: grid; grid-template-columns: 1fr; gap: 32px;
-  align-items: center; padding: 24px 0 8px;
+  display: grid; grid-template-columns: 1fr; gap: 40px;
+  align-items: center; padding: 20px 0 8px;
 }
-@media (min-width: 860px) {
-  .hero { grid-template-columns: 1.05fr 0.95fr; gap: 48px; padding: 40px 0 24px; }
-}
-
-.eyebrow {
-  display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--accent);
-  background: var(--glow); border-radius: 999px; padding: 5px 13px; margin-bottom: 16px;
+@media (min-width: 900px) {
+  /* The words take a hair over half. The phone gets the rest and is allowed
+     to be large: it is the only piece of evidence on the page that the thing
+     described actually exists. */
+  .hero { grid-template-columns: 1.02fr 0.98fr; gap: 56px; padding: 48px 0 32px; }
 }
 
-/* -------------------------------------------------------------------- phone */
+/* ------------------------------------------------------------------- phone */
 
 .phone {
-  width: 100%; max-width: 270px; margin-inline: auto;
-  border: 1px solid var(--line); border-radius: 30px; padding: 7px;
-  background: var(--card); box-shadow: var(--shadow);
+  width: 100%; max-width: 288px; margin-inline: auto;
+  border: 1px solid var(--rim); border-radius: 34px; padding: 8px;
+  background: var(--card); box-shadow: var(--lift);
 }
-.phone img { border-radius: 24px; width: 100%; }
-.phone-lg { max-width: 300px; }
+.phone img { border-radius: 27px; width: 100%; }
+.phone-lg { max-width: 340px; }
+@media (min-width: 900px) {
+  .phone { max-width: 300px; }
+  .phone-lg { max-width: 380px; }
 
-/* ------------------------------------------------------------------- strips */
+  /* A phone screen is two and a half times taller than it is wide, so shown
+     whole beside two lines of text it leaves a column that is mostly empty.
+     The section phones are cut off partway down and faded out instead: the
+     screen reads as continuing past the frame, and the row closes up to the
+     height of what is actually being said. The hero keeps its whole device,
+     because there it is the evidence rather than an illustration. */
+  .feature .phone {
+    max-height: 500px; overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 99%);
+    mask-image: linear-gradient(to bottom, #000 72%, transparent 99%);
+  }
+}
+
+/* ------------------------------------------------------------------- proof
+ *
+ * Three promises, set as statements rather than as another row of cards. The
+ * page already spends two grids on cards; a third would make the whole scroll
+ * one texture. Rules and weight carry these instead.
+ */
 
 .strip {
-  display: grid; gap: 12px; margin: 44px 0;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  display: grid; gap: 0; margin: 64px 0 16px;
+  border-block: 1px solid var(--line);
 }
-.strip div {
-  background: var(--card); border: 1px solid var(--line);
-  border-radius: 14px; padding: 16px 18px;
+.strip div { padding: 26px 4px; }
+.strip div + div { border-block-start: 1px solid var(--line); }
+.strip b {
+  display: block; font-size: clamp(19px, 2.2vw, 23px); font-weight: 700;
+  margin-bottom: 6px; line-height: 1.25;
 }
-.strip b { display: block; font-size: 15px; margin-bottom: 2px; }
-.strip span { color: var(--muted); font-size: 14px; }
+.strip span { color: var(--muted); font-size: 16px; }
+@media (min-width: 820px) {
+  .strip { grid-template-columns: repeat(3, 1fr); gap: 0 44px; }
+  .strip div { padding: 34px 0; }
+  .strip div + div {
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--line);
+    padding-inline-start: 44px; margin-inline-start: -44px;
+  }
+}
 
 /* ----------------------------------------------------------------- features */
 
-.section-head { margin: 72px 0 8px; }
-.section-head p { color: var(--muted); margin: 0; }
+.section-head { margin: clamp(80px, 8vw, 112px) 0 0; max-width: 24ch; }
+.section-head p { color: var(--muted); margin: 10px 0 0; font-size: 18px; max-width: 34em; }
+/* A heading belongs to what follows it, so the two are not separated by the
+   same gap that separates one section from the next. */
+.section-head + .feature, .section-head + .grid { margin-block-start: 40px; }
 
 .feature {
-  display: grid; grid-template-columns: 1fr; gap: 28px;
-  align-items: center; margin: 44px 0;
+  display: grid; grid-template-columns: 1fr; gap: 32px;
+  align-items: center; margin: 56px 0;
 }
-@media (min-width: 860px) {
-  .feature { grid-template-columns: 1fr 1fr; gap: 56px; margin: 72px 0; }
+@media (min-width: 900px) {
+  .feature { grid-template-columns: 1fr 1fr; gap: 72px; margin: 104px 0; }
   /* The phone leads, on the opposite side to the hero's. Marking the ones
      that swap with a class rather than :nth-of-type keeps it from depending
      on how many other sections happen to sit above them. */
   .feature .feature-art { order: -1; }
   .feature.flip .feature-art { order: 0; }
 }
-.feature h2 { margin-bottom: 8px; }
-.feature p { color: var(--muted); margin: 0 0 12px; }
-.feature ul { margin: 0; padding-inline-start: 20px; color: var(--muted); }
-.feature li { margin-bottom: 4px; }
+.feature h2 { font-size: clamp(25px, 3.4vw, 38px); margin-bottom: 14px; }
+.feature p { color: var(--muted); margin: 0 0 16px; font-size: 18px; max-width: 34em; }
 
-/* --------------------------------------------------------------------- grid */
+/* The three example sentences are the product's own voice, so they are set
+   as the app would show them rather than as a bulleted list. */
+.feature ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.feature li {
+  background: var(--raise); border: 1px solid var(--line);
+  border-radius: 14px; padding: 11px 16px;
+  font-size: 16px; justify-self: start; max-width: 100%;
+}
+
+/* --------------------------------------------------------------------- grid
+ *
+ * The free features, as a list rather than as tiles. Cards are saved for the
+ * Pro band, so the two sections do not read as the same thing twice.
+ */
 
 .grid {
-  display: grid; gap: 12px; margin: 28px 0 0;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  display: grid; gap: 0; margin: 40px 0 0;
+  border-block-start: 1px solid var(--line);
 }
-.tile {
-  background: var(--card); border: 1px solid var(--line);
-  border-radius: 14px; padding: 18px;
+.tile { padding: 22px 4px; border-block-end: 1px solid var(--line); }
+.tile b { display: block; margin-bottom: 4px; font-size: 18px; }
+.tile span { color: var(--muted); font-size: 16px; }
+@media (min-width: 720px) {
+  .grid { grid-template-columns: repeat(2, 1fr); column-gap: 56px; }
 }
-.tile b { display: block; margin-bottom: 4px; }
-.tile span { color: var(--muted); font-size: 14px; }
+@media (min-width: 1000px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}
 
-/* ---------------------------------------------------------------------- pro */
+/* ---------------------------------------------------------------- pro band
+ *
+ * The one place on the page where the brand owns the whole surface instead of
+ * trimming it. Everything above is light and evenly paced; this arrives as a
+ * block of ink and stays that way until the prices. It is the peak of the
+ * scroll, and it is what makes Pro read as a different tier rather than as
+ * six more of the same squares.
+ *
+ * The negative inline margin pulls it out to the full viewport and the inner
+ * wrapper puts the text back on the page's own measure, so the band bleeds
+ * while its contents stay aligned with everything above it.
+ */
+
+.band {
+  margin-inline: calc(50% - 50vw);
+  margin-block: 120px 0;
+  padding-block: clamp(64px, 9vw, 112px);
+  background: var(--ink);
+  color: var(--ink-text);
+  /* In the light theme the change of surface is the whole event and needs no
+     help; in the dark theme the two surfaces are close, so a gold hairline
+     draws the edge that the colour alone is too quiet to draw. */
+  border-block: 1px solid transparent;
+  --accent: var(--ink-accent);
+  --accent-ink: var(--ink-accent);
+  --muted: var(--ink-muted);
+  --line: var(--ink-line);
+}
+@media (prefers-color-scheme: dark) {
+  .band { border-block-color: color-mix(in srgb, var(--ink-accent) 24%, transparent); }
+}
+.band > * { max-width: 1120px; margin-inline: auto; padding-inline: 16px; }
+/* margin-block, not margin: the inline margins are the `auto` that holds this
+   on the page's measure, and zeroing them throws the heading out to the edge
+   of the viewport while everything above stays where it was. */
+.band .section-head { margin-block: 0; max-width: 1120px; }
+.band .section-head h2 { font-size: clamp(32px, 5.6vw, 60px); }
+.band .section-head p { max-width: 46ch; }
+
+/* Six items, so the column count is set rather than left to auto-fit: at a
+   wide measure auto-fit chooses four and leaves the last row half empty. */
+.pro-grid {
+  display: grid; gap: 14px; margin: 48px auto 0;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 620px) { .pro-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 960px) { .pro-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+.pro-item {
+  border: 1px solid var(--ink-line); border-radius: 18px;
+  padding: 24px 22px 26px;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--ink-accent) 5%, transparent), transparent 60%);
+  transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s ease;
+}
+.pro-item svg {
+  width: 26px; height: 26px; color: var(--ink-accent);
+  margin-bottom: 16px; stroke-width: 1.75;
+}
+.pro-item b { display: block; font-size: 18px; margin-bottom: 5px; }
+.pro-item span { color: var(--ink-muted); font-size: 16px; }
+
+/* The prices sit inside the band too, so the decision and the pitch share one
+   surface and nobody has to scroll back out of the dark to act on it. */
+.pro-buy { margin-block-start: clamp(48px, 6vw, 72px); }
+.pro-buy .card { margin-inline: auto; }
+.band .card {
+  background: color-mix(in srgb, var(--ink-text) 4%, transparent);
+  border-color: var(--ink-line);
+}
+.band input[type="email"], .band input[type="password"], .band input[type="text"] {
+  background: color-mix(in srgb, #000 30%, transparent);
+  border-color: var(--ink-line); color: var(--ink-text);
+}
+.band .status { background: color-mix(in srgb, var(--ink-text) 6%, transparent); }
+.band .plan { background: color-mix(in srgb, #000 22%, transparent); }
+.band .btn-ghost { color: var(--ink-text); }
+
+/* ------------------------------------------------------------------ cards */
 
 .card {
-  background: var(--card); border: 1px solid var(--line); border-radius: 18px;
-  padding: 24px; margin-bottom: 24px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 20px;
+  padding: 28px; margin-bottom: 20px; max-width: 560px;
 }
-#pro { scroll-margin-top: 24px; }
+#pro { scroll-margin-top: 20px; }
 .who { color: var(--muted); font-size: 14px; }
 
 /* ------------------------------------------------------- email sign-in */
@@ -218,15 +406,17 @@ button:disabled { opacity: 0.55; cursor: default; transform: none; }
 .field span { font-size: 13px; font-weight: 600; color: var(--muted); }
 
 input[type="email"], input[type="password"], input[type="text"] {
-  font: inherit; width: 100%; padding: 12px 14px;
+  font: inherit; width: 100%; padding: 13px 15px;
   color: var(--text); background: var(--bg);
   border: 1px solid var(--line); border-radius: 12px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
+input:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
 input:focus-visible {
   outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent);
 }
 /* The code is short and read back digit by digit, so it gets room to breathe. */
-#code-in { letter-spacing: 0.35em; font-size: 18px; text-align: center; }
+#code-in { letter-spacing: 0.35em; font-size: 18px; text-align: center; font-variant-numeric: tabular-nums; }
 
 .switcher {
   display: flex; flex-wrap: wrap; gap: 8px 20px;
@@ -240,34 +430,38 @@ input:focus-visible {
 
 .plans { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
 .plan {
-  border: 1px solid var(--line); border-radius: 14px; padding: 18px;
+  border: 1px solid var(--line); border-radius: 16px; padding: 20px;
   text-align: center; background: var(--bg);
+  font-variant-numeric: tabular-nums;
+  transition: border-color 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.plan-name { font-weight: 700; font-size: 18px; }
+.plan-name { font-weight: 700; font-size: 19px; }
 .plan-per { color: var(--muted); font-size: 14px; margin-bottom: 14px; }
 
 /* The free week, above the prices: it is the easiest thing to say yes to. */
 .trial {
-  border: 1px solid var(--accent); background: var(--glow);
-  border-radius: 16px; padding: 22px; margin-bottom: 20px; text-align: center;
+  border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-radius: 18px; padding: 24px; margin-bottom: 20px; text-align: center;
 }
-.trial-head { font-size: 19px; font-weight: 700; margin: 0 0 6px; }
+.trial-head { font-size: 20px; font-weight: 700; margin: 0 0 6px; }
 .trial-sub { font-size: 14px; color: var(--muted); margin: 0 0 16px; }
 
 /* --------------------------------------------------------------------- faq */
 
-.faq { margin-top: 24px; border-top: 1px solid var(--line); }
+.faq { margin-top: 32px; border-top: 1px solid var(--line); }
 .faq details { border-bottom: 1px solid var(--line); }
 .faq summary {
-  cursor: pointer; padding: 16px 4px; font-weight: 700; list-style: none;
+  cursor: pointer; padding: 20px 4px; font-weight: 700; font-size: 18px;
+  list-style: none;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
 }
 .faq summary::-webkit-details-marker { display: none; }
 .faq summary::after {
-  content: "+"; color: var(--accent); font-size: 22px; font-weight: 400; line-height: 1;
+  content: "+"; color: var(--accent-ink); font-size: 26px; font-weight: 400; line-height: 1;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .faq details[open] summary::after { content: "\2212"; }
-.faq p { color: var(--muted); padding: 0 4px 16px; margin: 0; }
+.faq p { color: var(--muted); padding: 0 4px 20px; margin: 0; max-width: 62ch; font-size: 17px; }
 
 /* ------------------------------------------------------------------ policy */
 
@@ -276,12 +470,31 @@ article + article { border-top: 1px solid var(--line); margin-top: 48px; padding
 .features { list-style: none; padding: 0; margin: 0 0 32px; }
 .features li { padding: 7px 0; }
 
+/* -------------------------------------------------------- browser surfaces
+ *
+ * The parts nobody draws. Left alone they ship in the browser's own blue,
+ * which belongs to no design and is the quickest tell that a page was
+ * assembled rather than built.
+ */
+
+::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); color: var(--text); }
+input { caret-color: var(--accent); }
+* { scrollbar-color: var(--line) transparent; scrollbar-width: thin; }
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--line); border-radius: 99px;
+  border: 3px solid var(--bg); background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--muted); background-clip: padding-box; }
+
 /* ------------------------------------------------------------------ motion
  *
- * Enough movement to make the page feel alive, and little enough that nobody
- * waits for it. Everything here is decoration: the page is complete and
- * readable with all of it switched off, which is exactly what happens for
- * someone who has asked their system for less motion.
+ * One authored moment, repeated with discipline rather than a different
+ * effect per section: content arrives from slightly below, slightly soft,
+ * and settles. The page is complete and readable with every line of this
+ * switched off, which is exactly what happens for someone who has asked
+ * their system for less motion.
  */
 
 /* Anchors glide rather than jump, so it is clear where you have been taken. */
@@ -292,85 +505,108 @@ nav {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  /* The bar passes over the Pro band, where a half-transparent light panel
+     would turn to smear. Kept near-opaque with a hairline under it, it reads
+     as the page's own chrome floating above whatever it happens to cross,
+     and its text stays legible on both surfaces. */
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border-block-end: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
   margin-inline: -16px;
   padding-inline: 16px;
 }
 
 @keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; transform: translateY(20px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
 }
 
 /* The hero arrives a beat at a time, top down, so the eye is led rather than
    handed everything at once. */
 /* :first-child keeps this to the words. Without it the selector also reaches
    the phone inside .feature-art and - being one specificity point heavier
-   than .phone - replaced its drift with a single entrance. */
-.hero > div:first-child > * { animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
-.hero .eyebrow { animation-delay: 0.05s; }
-.hero h1 { animation-delay: 0.12s; }
-.hero .lede { animation-delay: 0.19s; }
+   than .phone - would take its own entrance over. */
+.hero > div:first-child > * { animation: rise 0.85s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.hero h1 { animation-delay: 0.06s; }
+.hero .lede { animation-delay: 0.16s; }
 .hero .cta-row { animation-delay: 0.26s; }
-.hero .cta-note { animation-delay: 0.33s; }
-.hero .feature-art { animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards; }
+.hero .cta-note { animation-delay: 0.34s; }
+.hero .feature-art { animation: rise 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.14s backwards; }
 
 /* Everything below the fold waits until it is nearly in view. The class is
    added by the page; without JavaScript the content simply shows, because
    .reveal on its own is only a starting point that never gets set. */
 .reveal {
   opacity: 0;
-  transform: translateY(40px) scale(0.97);
-  transition: opacity 0.8s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(34px);
+  filter: blur(7px);
+  transition: opacity 0.75s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.75s ease;
 }
-.reveal.seen { opacity: 1; transform: none; }
+.reveal.seen { opacity: 1; transform: none; filter: none; }
 
 /* Children arrive one after another rather than as a block. The index is set
    by the page; without it every child simply shares the same delay of zero. */
-.reveal > * { transition-delay: calc(var(--i, 0) * 70ms); }
+.reveal > * { transition-delay: calc(var(--i, 0) * 60ms); }
 .reveal.seen .tile,
 .reveal.seen .plan,
-.reveal.seen > div { animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.reveal.seen > div { animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+
+/* The band is the peak of the scroll and gets the longest entrance on the
+ * page: a gold rule draws itself out under the heading, and the six cards
+ * follow it across in sequence.
+ *
+ * What it deliberately does not do is animate the band itself. Clipping or
+ * fading a full-bleed slab means that if the effect ever fails to run - a
+ * stalled transition, a browser that never fires the observer - it fails
+ * closed, and the part of the page that sells the product is simply not
+ * there. Everything here is additive instead: the rule is a decoration that
+ * can be absent, and the ink and the prices are on the page from the start.
+ */
+.band.reveal { opacity: 1; transform: none; filter: none; }
+
+.band .section-head { position: relative; padding-block-end: 26px; }
+.band .section-head::after {
+  /* 16px, not 0: the heading's box carries the band's own inline padding, so
+     an edge-anchored rule would start a gutter short of the first letter. */
+  content: ""; position: absolute; inset-block-end: 0; inset-inline-start: 16px;
+  width: clamp(120px, 22vw, 260px); height: 3px; border-radius: 3px;
+  background: linear-gradient(to right, var(--ink-accent),
+    color-mix(in srgb, var(--ink-accent) 15%, transparent));
+  transform: scaleX(0); transform-origin: 0 50%;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+}
+/* inset-inline-start already puts the rule under the start of the heading in
+   both directions. What does not follow the writing mode is which way it
+   grows and which end of the gradient is the bright one, so only those flip. */
+html[dir="rtl"] .band .section-head::after {
+  inset-inline-start: 16px;
+  transform-origin: 100% 50%;
+  background: linear-gradient(to left, var(--ink-accent),
+    color-mix(in srgb, var(--ink-accent) 15%, transparent));
+}
+.band.reveal.seen .section-head::after { transform: scaleX(1); }
+
+.band.reveal .pro-item { opacity: 0; }
+.band.reveal.seen .pro-item {
+  opacity: 1;
+  animation: rise 0.85s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: calc(0.2s + var(--i, 0) * 90ms);
+}
 
 /* A thin gold line across the top saying how far down the page you are. */
 #progress {
   position: fixed; inset-block-start: 0; inset-inline-start: 0;
-  height: 3px; width: 0;
+  height: 3px; width: 100%;
   background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 40%, transparent));
   z-index: 50;
-  transition: width 0.1s linear;
+  /* Scaled rather than resized: animating width relays out the page on every
+     scroll event, and a transform is composited on its own. */
+  transform: scaleX(0); transform-origin: 0 50%;
+  transition: transform 0.1s linear;
 }
-
-/* The headline carries the brand's gold through it, moving slowly, so the
-   first thing on the page is not flat. */
-@keyframes sheen { to { background-position: 200% center; } }
-/* Matched the same way as the stagger rule above, and after it, so the
-   headline keeps both its entrance and its moving gold rather than having
-   the shorter selector overruled. */
-.hero > div:first-child > h1 {
-  background: linear-gradient(100deg,
-    var(--text) 0%, var(--text) 35%,
-    var(--accent) 50%,
-    var(--text) 65%, var(--text) 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.12s backwards,
-             sheen 6s linear 1.2s infinite;
-}
-
-/* The pool of colour behind the top of the page breathes. */
-@keyframes breathe { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
-body::before {
-  content: "";
-  position: fixed; inset-block-start: -200px; inset-inline: 0;
-  height: 620px; z-index: -1; pointer-events: none;
-  background: radial-gradient(50% 300px at 50% 200px, var(--glow), transparent 70%);
-  animation: breathe 7s ease-in-out infinite;
-}
+html[dir="rtl"] #progress { transform-origin: 100% 50%; }
 
 /* A light travels across a primary button when the pointer is on it. */
 .btn-primary, .primary { position: relative; overflow: hidden; }
@@ -386,38 +622,27 @@ body::before {
   .btn-primary:hover::after, .primary:hover::after { inset-inline-start: 120%; }
 }
 
-/* A phone held still looks like a screenshot; a phone that breathes looks
-   like a device. Six seconds is slow enough not to be noticed directly. */
-/* A phone held still looks like a screenshot. This one drifts and tips a
-   little, which reads as a device someone is holding. */
-@keyframes drift {
-  0%, 100% { transform: translateY(0) rotate(-1.2deg); }
-  50% { transform: translateY(-22px) rotate(1.2deg); }
-}
-.phone { animation: drift 7s ease-in-out infinite; will-change: transform; }
-.hero .phone { animation-duration: 8s; }
-.feature:nth-of-type(even) .phone { animation-delay: -3.5s; }
-
 /* Things you can press answer when the pointer is over them. */
-.tile, .plan, .strip div {
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
-}
 @media (hover: hover) {
-  .tile:hover, .strip div:hover, .plan:hover {
-    transform: translateY(-6px);
-    border-color: var(--accent);
-    box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 18%, transparent);
+  .tile { transition: background 0.25s ease; }
+  .tile:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+  .pro-item:hover {
+    border-color: color-mix(in srgb, var(--ink-accent) 55%, transparent);
+    background: linear-gradient(180deg,
+      color-mix(in srgb, var(--ink-accent) 11%, transparent), transparent 65%);
+    transform: translateY(-4px);
   }
+  .plan:hover { border-color: var(--accent); transform: translateY(-4px); }
   .btn-primary:hover, .primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 35%, transparent);
+    box-shadow: 0 12px 30px color-mix(in srgb, var(--accent) 38%, transparent);
   }
-  .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .phone:hover { animation-play-state: paused; }
+  .btn-ghost:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .faq summary:hover::after { transform: scale(1.18); }
 }
 
 /* Keyboard users get the same outline everywhere, and a visible one. */
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
 
 .faq details { transition: background 0.2s ease; }
 .faq details[open] { background: color-mix(in srgb, var(--accent) 5%, transparent); }
@@ -429,11 +654,7 @@ body::before {
     animation: none !important;
   }
   /* Whatever the reveal was waiting for, it is not waiting any more. */
-  .reveal, .reveal > * { opacity: 1 !important; transform: none !important; }
-  /* The headline is painted through a moving gradient; with the animation off
-     it would sit there as transparent text on a static gradient, so it goes
-     back to being ordinary words. */
-  .hero > div:first-child > h1 { background: none; color: var(--text); -webkit-text-fill-color: currentColor; }
+  .reveal, .reveal > *, .pro-item { opacity: 1 !important; transform: none !important; filter: none !important; }
+  .band .section-head::after { transform: scaleX(1) !important; }
   #progress { display: none; }
-  body::before { opacity: 0.8; }
 }
